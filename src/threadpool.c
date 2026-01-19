@@ -1,5 +1,3 @@
-#include "threadpool.h"
-
 #include "tpstat.h"
 #include "atomic.h"
 #include "spinlock.h"
@@ -92,6 +90,8 @@ static inline _job_t *_job_malloc()
             return job;
         }
     }
+
+    return NULL;
 }
 
 static inline void _job_free(_job_t *job)
@@ -120,7 +120,7 @@ static inline void _sem_wait_time(struct timespec *ts)
 
     long nsec = ts->tv_nsec + (SEM_WAIT_TIME * NS_PER_MS);
     ts->tv_sec += nsec / NS_PER_S;
-    tv->tv_nsec = nsec % NS_PER_S;
+    ts->tv_nsec = nsec % NS_PER_S;
 }
 
 /*************************************************************************
@@ -205,7 +205,7 @@ static void *_thread_svc(void *args)
             void *arg = job->args;
             _job_free(job);
 
-            func(args);
+            func(arg);
             (void)atomic_u32_dec(&thread->jobs);
         }
     }
@@ -346,7 +346,7 @@ void threadraw_wakeup(threadraw_t *raw)
 
 uint32_t threadcount_recommend()
 {
-    long cpu = sysconf(_SC_NRPROCESSORS_CONF);
+    long cpu = sysconf(_SC_NPROCESSORS_CONF);
     if (cpu < 0)
     {
         log_warn("thread: get cpu count failed, ret=%ld", cpu);
@@ -356,7 +356,7 @@ uint32_t threadcount_recommend()
     float ratio = (float)(MAX_RATIO - cpu * DELTA);
     if (ratio < MIN_RATIO)
     {
-        ration = MIN_RATIO;
+        ratio = MIN_RATIO;
     }
 
     return (uint32_t)(cpu * ratio);
@@ -425,7 +425,7 @@ threadpool_t *threadpool_create(const char *name, unsigned int threads, int nid)
     pool->index = 0U;
     pool->count = count;
 
-    tpstart_register(pool->name, pool);
+    tpstat_register(pool->name, pool);
     return pool;
 }
 

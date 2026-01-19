@@ -144,7 +144,7 @@ void hashmap_cleanup(hashmap_t *map, void *args, HMfunc_void func)
         {
             hashlink_t *exist_data = container_of(curr, hashlink_t, list_node);
             list_del(&exist_data->list_node);
-            if (NULL == func)
+            if (NULL != func)
             {
                 func(args, exist_data);
             }
@@ -339,7 +339,7 @@ int hashmap_protect(hashmap_t       *map,
     list_foreach(curr, &bucket->list)
     {
         hashlink_t *exist_data = container_of(curr, hashlink_t, list_node);
-        if (0 != (map->cmp(key, exist_data->key)))
+        if (0 == (map->cmp(key, exist_data->key)))
         {
             int ret = 0;
             if (NULL != work)
@@ -383,7 +383,7 @@ int hashmap_delete(hashmap_t        *map,
         hashlink_t *exist_data = container_of(curr, hashlink_t, list_node);
         if (0 == (map->cmp(key, exist_data->key)))
         {
-            if (NULL !- func)
+            if (NULL != func)
             {
                 /* 若func判定不为OK，则取消删除并返回判定结果 */
                 int ret = func(args, exist_data);

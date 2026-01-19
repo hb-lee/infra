@@ -14,7 +14,7 @@ typedef struct hashmap hashmap_t;
 
 typedef struct
 {
-    list_heat_t list_node;      /* 冲突链 */
+    list_head_t list_node;      /* 冲突链 */
     void    *key;           /* hash key */
 }hashlink_t;
 
@@ -53,7 +53,7 @@ int hashmap_replace (hashmap_t  *map,
                     hashlink_t  *new_data,
                     hashlink_t  **old_data,
                     void    *args,
-                    HMfunc_void func);
+                    HMfunc_int func);
 
 int hashmap_search  (hashmap_t  *map,
                     void    *key,

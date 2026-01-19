@@ -7,7 +7,7 @@
 #include <string>
 
 #define MCSTAT_CMD  "mcstat"
-#define MCSTAT_ARGS 2
+#define MCSTAT_ARGC 2
 
 /*************************************************************************
 *************************************************************************/
@@ -100,7 +100,7 @@ static void _mcstat_func(void *nouse,
                             int argc,
                             argv_t argv)
 {
-    if (argc != MCSTAT_ARGS)
+    if (argc != MCSTAT_ARGC)
     {
         _mcstat_help(nouse, print);
         return;

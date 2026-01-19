@@ -92,7 +92,7 @@ static inline int32_t atomic_s32_fetch(int32_t *var)
 
 static inline void atomic_s32_store(int32_t *var, int32_t val)
 {
-    _atomic_store_n(var, val, __ATOMIC_SEQ_CST);
+    __atomic_store_n(var, val, __ATOMIC_SEQ_CST);
 }
 
 static inline bool atomic_s32_cas(int32_t *var,
@@ -161,7 +161,7 @@ static inline uint16_t atomic_u16_post_setbits(uint16_t *var, uint16_t bits)
     return __atomic_fetch_or(var, bits, __ATOMIC_SEQ_CST);
 }
 
-static inlint uint16_t atomic_u16_fetch(uint16_t *var)
+static inline uint16_t atomic_u16_fetch(uint16_t *var)
 {
     return __atomic_load_n(var, __ATOMIC_SEQ_CST);
 }

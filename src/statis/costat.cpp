@@ -118,7 +118,7 @@ class CostatMgr
 
         static void PrintAll(void (*print)(const char *, ...))
         {
-            /* 1. 打印lwt延迟统计信息 */
+            /* 1. 打印lwt延时统计信息 */
             print("---------------------------------------------------------------------");
             print("| %-10s | %-10s | %8s | %8s | %10s |",
                     "Name", "Operation", "Doing", "Average", "Max");

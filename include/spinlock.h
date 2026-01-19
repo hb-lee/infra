@@ -40,9 +40,9 @@ static inline void spinlock_lock(spinlock_t *lock)
                         "jnz 2b\n"
                         "jmp 1b\n"
                         "3:\n"
-                        :[locked] "=m" (lock->locked), [lv] "=q" (lock_val)
-                        :"[lv]" (lock_val)
-                        :"memory");
+                        : [locked] "=m" (lock->locked), [lv] "=q" (lock_val)
+                        : "[lv]" (lock_val)
+                        : "memory");
 }
 
 static inline void spinlock_unlock(spinlock_t *lock)
@@ -51,9 +51,9 @@ static inline void spinlock_unlock(spinlock_t *lock)
     __asm__ __volatile__(
                         LOCK_PREFIX
                         "xchg %[locked], %[ulv]\n"
-                        :[locked] "=" (lock->locked), [ulv] "=q" (unlock_val)
-                        :"[ulv]" (unlock_val)
-                        :"memory");
+                        : [locked] "=" (lock->locked), [ulv] "=q" (unlock_val)
+                        : "[ulv]" (unlock_val)
+                        : "memory");
 }
 
 #else

@@ -1,6 +1,9 @@
 #ifndef __MCACHE_H__
 #define __MCACHE_H__
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

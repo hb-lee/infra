@@ -80,7 +80,7 @@ mempool_t *mempool_create(uint32_t size, uint32_t count)
     int cpu = (int)sysconf(_SC_NPROCESSORS_CONF);
     if (0 > cpu)
     {
-        log_warn("sysconf get CPUS fail, err=%s", stderror(errno));
+        log_warn("sysconf get CPUS fail, err=%s", strerror(errno));
         cpu = (int)MAX_CPUS;
     }
 
@@ -144,7 +144,7 @@ mempool_t *mempool_create(uint32_t size, uint32_t count)
         if (NULL == pool->b_map[i])
         {
             log_error("mempool: create bitmap(%u, %u) failed",
-                        i,, bits_in_map[i]);
+                        i, bits_in_map[i]);
 
             _mempool_destroy_bitmap(pool);
             free(pool);
@@ -209,7 +209,7 @@ void mempool_free(mempool_t *mempool, void *mem)
 
     if (0 != bitmap_freebit(mempool->b_map[idx], bit))
     {
-        log_error("mempool: may be doubel-free");
+        log_error("mempool: may be double-free");
         abort();
     }
 

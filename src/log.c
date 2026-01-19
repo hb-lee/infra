@@ -13,7 +13,7 @@ static const char * const g_logname[LOG_BUTT] =
     [LOG_DEFAULT] = "default",
     [LOG_DELETE] = "del_log",
     [LOG_OP] = "op_log",
-    [LOG_RECORD] = "op_record",
+    [LOG_RECORD] = "nfs_record",
     [LOG_REST] = "rest_op"
 };
 
@@ -131,7 +131,7 @@ void log_print(log_type_t type,
     zlog_category_t *cat = g_logger[type];
     (NULL == cat) ?
         vdzlog(file, filelen, func, funclen, line, zlevel, format, args) :
-        vzlog(cat, file, filelen,, func, funclen, line, zlevel, format, args);
+        vzlog(cat, file, filelen, func, funclen, line, zlevel, format, args);
 
     va_end(args);
 }

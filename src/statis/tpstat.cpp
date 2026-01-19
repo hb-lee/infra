@@ -14,7 +14,7 @@
 *************************************************************************/
 
 static void _tpstat_help(void *, void (*)(const char *, ...));
-static void _tpstat_func(void *, void (*)(cosnt char *, ...), int, argv_t);
+static void _tpstat_func(void *, void (*)(const char *, ...), int, argv_t);
 
 class TpstatMgr
 {
@@ -42,7 +42,7 @@ class TpstatMgr
                     print("| %-12s | %5u | %4u | %4u | %4u | %4u | %4u | %4u | %4u | %4u |",
                         info.name, info.total, val[0], val[1], val[2], val[3], val[4],
                         val[5], val[6], val[7]) :
-                    print("| %-12s | %5u | %4u | %4u | %4u | %4u | %4u | %4u | %4u | %4u |",
+                    print("| %-12s | %5s | %4u | %4u | %4u | %4u | %4u | %4u | %4u | %4u |",
                         " ", " ", val[0], val[1], val[2], val[3], val[4], val[5],
                         val[6], val[7]);
             }

@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-#ifdef __X86_64__
+#ifdef __x86_64__
 
 static inline int64_t bmap_bsf(uint64_t num)
 {
@@ -27,7 +27,7 @@ static inline void bmap_set_bit(int siNr, void *pAddr)
     __asm__ __volatile__(
         "bts %1,%0"
         : "+m" (*(volatile uint64_t *)pAddr)
-        : "lr" (siNr)
+        : "Ir" (siNr)
         : "memory");
 }
 
@@ -36,7 +36,7 @@ static inline void bmap_clear_bit(int siNr, void *pAddr)
     __asm__ __volatile__(
         "btr %1,%0"
         : "+m" (*(volatile uint64_t *)pAddr)
-        : "lr" (siNr));
+        : "Ir" (siNr));
 }
 
 static inline int bmap_test_bit(int siNr, void *pAddr)
@@ -47,7 +47,7 @@ static inline int bmap_test_bit(int siNr, void *pAddr)
         "bt %2,%1\n\t"
         "sbb %0,%0"
         : "=r" (oldbit)
-        : "m" (*(volatile uint64_t *)pAddr), "lr" (siNr));
+        : "m" (*(volatile uint64_t *)pAddr), "Ir" (siNr));
 
     return oldbit;
 }
@@ -60,7 +60,7 @@ static inline int bmap_testset_bit(int siNr, void *pAddr)
         "bts %2,%1\n\t"
         "sbb %0,%0"
         : "=r" (oldbit)
-        : "m" (*(volatile uint64_t *)pAddr), "lr" (siNr));
+        : "m" (*(volatile uint64_t *)pAddr), "Ir" (siNr));
 
     return oldbit;
 }
@@ -73,7 +73,7 @@ static inline int bmap_testclear_bit(int siNr, void *pAddr)
         "btr %2,%1\n\t"
         "sbb %0,%0"
         : "=r" (oldbit)
-        : "m" (*(volatile uint64_t *)pAddr), "lr" (siNr));
+        : "m" (*(volatile uint64_t *)pAddr), "Ir" (siNr));
 
     return oldbit;
 }
@@ -95,7 +95,7 @@ static inline void bmap_clear_bit(int siNr, void *pAddr)
     *(uint64_t *)pAddr &= ~(1UL << siNr);
 }
 
-static inline int bmap_test_bit(int siNr, void  pAddr)
+static inline int bmap_test_bit(int siNr, void *pAddr)
 {
     return (((*(uint64_t *)pAddr) & (1UL << siNr)) != 0UL) ? -1 : 0;
 }
@@ -111,7 +111,7 @@ static inline int bmap_testset_bit(int siNr, void *pAddr)
     return 0;
 }
 
-static inline int bmap testclear_bit(int siNr, void *pAddr)
+static inline int bmap_testclear_bit(int siNr, void *pAddr)
 {
     if (*(uint64_t *)pAddr & (1UL << siNr))
     {

@@ -78,7 +78,7 @@ static int _sleeper_init(sleeper_t *sleeper)
     ret = pthread_condattr_setclock(&sleeper->cattr, CLOCK_MONOTONIC);
     if (0 != ret)
     {
-        log_error("pthread condattr_setclock failed, err(%s)", strerror(ret));
+        log_error("pthread_condattr_setclock failed, err(%s)", strerror(ret));
         (void)pthread_condattr_destroy(&sleeper->cattr);
         return -1;
     }
@@ -141,7 +141,7 @@ static void _sleeper_wait(sleeper_t *sleeper, uint64_t timeout)
 
     while (sleeper->enable && (0 > _timespec_cmp(&now, &tm)))
     {
-        (void)pthread_cond_timewait(&sleeper->cond, &sleeper->mutex, &tm);
+        (void)pthread_cond_timedwait(&sleeper->cond, &sleeper->mutex, &tm);
 
         ret = clock_gettime(CLOCK_MONOTONIC, &now);
         sys_assert(0 == ret);
@@ -254,7 +254,7 @@ stimer_t *stimer_create(const char *name,
         return NULL;
     }
 
-    spinlock_lock(&timer->lock);
+    spinlock_init(&timer->lock);
 
     if (0 != _sleeper_init(&timer->sleeper))
     {

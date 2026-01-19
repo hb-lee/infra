@@ -27,7 +27,7 @@ typedef struct
 
 struct bitmap
 {
-    spinlock_t      *lock;
+    spinlock_t      lock;
 
     int             max;                /* 位总数 */
     int             level;              /* 位图的层次 */
@@ -63,7 +63,7 @@ static inline int _find_first_zero_bit(_bits_t *bits, int *pos)
         uint64_t bmap = ~(bits->area[i]);
 
         res = bmap_bsf(bmap);
-        if (res > 0)
+        if (res >= 0)
         {
             res += (int64_t)i * BMAP_U64_BITS;
             break;
@@ -208,6 +208,7 @@ bitmap_t *bitmap_create(int bit_count)
     spinlock_init(&bmap->lock);
     bmap->max = bit_count;
     bmap->level = level;
+    bits = bit_count;
     for (int i = level - 1; i >= 0; i--)
     {
         bmap->layer[i].count = bits;

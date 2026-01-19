@@ -17,7 +17,7 @@
 
 typedef struct
 {
-    uint64_t    pad[SEMA_SIZE - 1];
+    uint64_t    pad[SEM_SIZE - 1];
     int         cond;
     int         flag;
 }_sem_t;
@@ -82,7 +82,7 @@ void sema_init(sema_t sem)
     }
     else
     {
-        if (0 != sema_init((sem_t *)(void *)local->pad, 0, 0))
+        if (0 != sem_init((sem_t *)(void *)local->pad, 0, 0))
         {
             log_error("sem_init(%p) failed, error(%s)", local->pad, strerror(errno));
             abort();

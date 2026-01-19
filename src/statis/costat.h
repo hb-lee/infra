@@ -3,7 +3,7 @@
 
 #include "coroutine.h"
 
-#ifdef __cpluscplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 

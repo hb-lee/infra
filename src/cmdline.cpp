@@ -135,7 +135,7 @@ class CmdSet
                                 void (*help)(void *ctx,
                                             void (*print)(const char *, ...)),
                                 void (*func)(void *ctx,
-                                            void (*print)(const char *, ..),
+                                            void (*print)(const char *, ...),
                                             int argc,
                                             argv_t argv))
         {
@@ -266,7 +266,7 @@ static int inline _help_mode(int argc, argv_t argv)
         return (NULL != CmdSet::FindCmd(argv[1])) ? HELP_ONE : HELP_ALL;
     }
 
-    return (NULL != CmdSet::FindCmd(argv[0])) ? HELP_ALL : HELP_NONE;
+    return (NULL == CmdSet::FindCmd(argv[0])) ? HELP_ALL : HELP_NONE;
 }
 
 static bool _need_help(CmdSession *se, int argc, argv_t argv)

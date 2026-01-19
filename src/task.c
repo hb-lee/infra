@@ -125,7 +125,7 @@ static inline void _fetch_job(tset_t *set)
 
     /* 3. 将子任务挂接到列表中 */
     job->state = JOB_INIT;
-    spinlock_lock(&job->link, &set->job_list);
+    spinlock_lock(&set->lock);
     list_add_tail(&job->link, &set->job_list);
     atomic_u32_inc(&set->cur_depth);
     spinlock_unlock(&set->lock);
@@ -332,7 +332,7 @@ tjob_t *taskjob_init(tset_t *set, void *job)
     tjob_t *tjob = _job_alloc(set);
     if (NULL ! = tjob)
     {
-        tjob-->job = job;
+        tjob->job = job;
     }
 
     return tjob;
@@ -352,7 +352,7 @@ void taskjob_fini(tjob_t *tjob, int ret)
 
     /* 2. 将job加入set之中，并尝试处理set */
     tset_t *set = tjob->set;
-    _taskset_inc(&set);
+    _taskset_inc(set);
     spinlock_lock(&set->lock);
     list_add_tail(&tjob->link, &set->job_list);
     spinlock_unlock(&set->lock);

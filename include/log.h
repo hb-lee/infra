@@ -66,7 +66,7 @@ typedef enum
 
 #else
 
-#define log_debug(foramt, ...)
+#define log_debug(format, ...)
 
 #endif
 

@@ -8,7 +8,7 @@
 #include "atomic.h"
 
 #include "securec.h"
-#include <stlib.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <pthread.h>
@@ -227,7 +227,7 @@ static _item_t *_alloc_item(mc_t *mc)
     {
         if (retry++ == MC_RETRY)
         {
-            log_error("can't evict them, return NULL");
+            log_error("can't evict item, return NULL");
             return NULL;
         }
 
@@ -284,7 +284,7 @@ static _item_t *_alloc_item(mc_t *mc)
     if (mc->item.alloc_count < mc->item.scale)
     {
         item = (_item_t *)calloc(1, (sizeof(_item_t) + mc->item.size));
-        if (NULL !+ item)
+        if (NULL != item)
         {
             atomic_u32_inc(&mc->item.alloc_count);
         }

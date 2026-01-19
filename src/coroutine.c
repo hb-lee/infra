@@ -1,4 +1,3 @@
-#include "coroutine.h"
 #include "costat.h"
 #include "threadpool.h"
 #include "spinlock.h"
@@ -128,7 +127,7 @@ static inline void _lwt_begin(lwtop_t *op, uint64_t *ts)
 {
     struct timespec now = {0};
     (void)clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
-    *ts = ((uint64)now.tv_sec * 1000000000UL + (uint64_t)now.tv_nsec);
+    *ts = ((uint64_t)now.tv_sec * 1000000000UL + (uint64_t)now.tv_nsec);
 
     atomic_u64_inc(&op->begin);
 }
@@ -169,7 +168,7 @@ static void _timer_svc(void *args)
         }
 
         /* 2. 判断队头元素是否可唤醒，如果不能唤醒则返回 */
-        _sleeper_t *sleeper = container_of(mgr->sleeper.list.next, sleeper_t, link);
+        _sleeper_t *sleeper = container_of(mgr->sleeper.list.next, _sleeper_t, link);
         if (0 != sleeper->timeout)
         {
             sleeper->timeout--;
@@ -247,7 +246,7 @@ static void _worker_svc(void *args)
     while (!list_empty(&lwt_head))
     {
         /* 取出lwt，调度执行 */
-        _lwt *lwt = container_of(lwt_head.next, _lwt_t, link);
+        _lwt_t *lwt = container_of(lwt_head.next, _lwt_t, link);
         list_del(&lwt->link);
         LWT_END(worker->mgr, LwtQue, lwt->ts);
 
@@ -257,7 +256,7 @@ static void _worker_svc(void *args)
         LWT_BEGIN(worker->mgr, LwtRun, &worker->ts);
         if (0 != swapcontext(&worker->ctx, &lwt->ctx))
         {
-            log_error("swapcontext failed, err(%s)", strerror(errno));
+            log_error("swapcontext fail, err(%s)", strerror(errno));
         }
 
         if (worker->swapped)
@@ -274,7 +273,7 @@ static void _worker_svc(void *args)
         mempool_free(worker->mgr->mem, lwt);
         if (NULL != _fini)
         {
-            _fini(args);
+            _fini(_args);
         }
 
         (void)atomic_s32_dec(&worker->lwt.count);
@@ -308,7 +307,7 @@ static void _worker_cleanup(void *args)
         sem->ret = -1;
         if (0 != swapcontext(&worker->ctx, &sem->lwt->ctx))
         {
-            log_err("swapcontext fail, err(%s)", strerror(errno));
+            log_error("swapcontext fail, err(%s)", strerror(errno));
         }
 
         spinlock_lock(&worker->lock);
@@ -326,7 +325,7 @@ static int _worker_need_sleep(void *args)
 static int _worker_init(comgr_t *mgr)
 {
     mgr->worker->list = (_worker_t *)calloc(mgr->worker.count, sizeof(_worker_t));
-    if (NULL == mgr->worker.list)
+    if (NULL == mgr->worker->list)
     {
         log_error("calloc fail");
         return -1;
@@ -509,7 +508,7 @@ int cosem_down(void *sem)
     _cosem_t *cosem = (_cosem_t *)sem;
     if (NULL == cosem->lwt)
     {
-        log_error("coroutine semaphore beglongs to no lwt");
+        log_error("coroutine semaphore belongs to no lwt");
         return -1;
     }
 
@@ -519,9 +518,9 @@ int cosem_down(void *sem)
     /* 1. 需要在coroutine sem锁形成的互斥区中执行一系列的操作 */
     spinlock_lock(&worker->lock);
     {
-        /* 1.1 如果val值小于等于0， 表面up操作先于down执行，直接返回即可 */
+        /* 1.1 如果val值小于等于0， 表明up操作先于down执行，直接返回即可 */
         ++(cosem->val);
-        if (0 >  cosem->val)
+        if (0 > cosem->val)
         {
             spinlock_unlock(&worker->lock);
             return 0;
@@ -562,7 +561,7 @@ void cosem_sleep(uint32_t ms)
     do
     {
         list_head_t *node;
-        list_foreach(node, &mgr->sleeper.list);
+        list_foreach(node, &mgr->sleeper.list)
         {
             _sleeper_t *_slp = container_of(node, _sleeper_t, link);
             if (_slp->timeout > sleeper.timeout)
@@ -715,7 +714,7 @@ comgr_t *comgr_create(const char *name,
 
     char buff[CLEN_MAX] = {0};
     (void)strncpy_s(buff, CLEN_MAX, name, 4);
-    (void)strncpy_s(buff, CLEN_MAX, "Timer", 6);
+    (void)strncat_s(buff, CLEN_MAX, "Timer", 6);
     mgr->sleeper.timer = stimer_create(buff, 1U, mgr, _timer_svc);
     if (NULL == mgr->sleeper.timer)
     {
