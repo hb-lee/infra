@@ -51,7 +51,7 @@ static inline void spinlock_unlock(spinlock_t *lock)
     __asm__ __volatile__(
                         LOCK_PREFIX
                         "xchg %[locked], %[ulv]\n"
-                        : [locked] "=" (lock->locked), [ulv] "=q" (unlock_val)
+                        : [locked] "=m" (lock->locked), [ulv] "=q" (unlock_val)
                         : "[ulv]" (unlock_val)
                         : "memory");
 }

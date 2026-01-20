@@ -324,8 +324,8 @@ static int _worker_need_sleep(void *args)
 
 static int _worker_init(comgr_t *mgr)
 {
-    mgr->worker->list = (_worker_t *)calloc(mgr->worker.count, sizeof(_worker_t));
-    if (NULL == mgr->worker->list)
+    mgr->worker.list = (_worker_t *)calloc(mgr->worker.count, sizeof(_worker_t));
+    if (NULL == mgr->worker.list)
     {
         log_error("calloc fail");
         return -1;
@@ -528,7 +528,7 @@ int cosem_down(void *sem)
 
         /* 1.2 coroutine sem需要加入worker中的相关队列(调测用途) */
         worker->swapped = true;
-        LWT_BEGIN(worker->mgr, LwtSche, &worker->ctx);
+        LWT_BEGIN(worker->mgr, LwtSche, &worker->ts);
         list_add_tail(&cosem->link, &worker->sem.head);
         ++(worker->sem.count);
     }

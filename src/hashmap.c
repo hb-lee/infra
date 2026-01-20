@@ -3,7 +3,7 @@
 #include "spinlock.h"
 #include "log.h"
 
-#include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <pthread.h>
 #include <math.h>
@@ -82,7 +82,7 @@ int hashmap_create(uint32_t     scale,
     for (uint32_t i = 0; i < b_count; i++)
     {
         list_init(&(hmap->buckets[i].list));
-        spinlock_init(&hashmap->buckets[i].lock);
+        spinlock_init(&hmap->buckets[i].lock);
         hmap->buckets[i].depth = 0;
     }
 

@@ -373,7 +373,7 @@ mc_t *mc_create(const char          *name,
     int ret = hashmap_create(scale, cmp, hash, &mc->map);
     if (0 != ret)
     {
-        log_error("hashmap create for mc(%s) failed, ret=%d",
+        log_error("hashmap_create for mc(%s) failed, ret=%d",
                     name, ret);
         free(mc);
         return NULL;
