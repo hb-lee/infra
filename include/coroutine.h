@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#ifndef __COROUTINE_H_
-#define __COROUTINE_H_
+#ifndef __COROUTINE_H__
+#define __COROUTINE_H__
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,5 +1,5 @@
-#ifndef _ATOMIC_H_
-#define _ATOMIC_H_
+#ifndef __ATOMIC_H__
+#define __ATOMIC_H__
 
 #include <stdint.h>
 #include <stdio.h>

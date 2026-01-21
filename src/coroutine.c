@@ -520,7 +520,7 @@ int cosem_down(void *sem)
     {
         /* 1.1 如果val值小于等于0， 表明up操作先于down执行，直接返回即可 */
         ++(cosem->val);
-        if (0 > cosem->val)
+        if (0 >= cosem->val)
         {
             spinlock_unlock(&worker->lock);
             return 0;

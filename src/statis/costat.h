@@ -1,5 +1,5 @@
-#ifndef __COSTATIS_H_
-#define __COSTATIS_H_
+#ifndef __COSTATIS_H__
+#define __COSTATIS_H__
 
 #include "coroutine.h"
 

@@ -1,5 +1,5 @@
-#ifndef _STIMER_H
-#define _STIMER_H
+#ifndef __STIMER_H__
+#define __STIMER_H__
 
 #include <stdint.h>
 

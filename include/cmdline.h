@@ -1,5 +1,5 @@
-#ifndef __CMDLINE_H_
-#define __CMDLINE_H_
+#ifndef __CMDLINE_H__
+#define __CMDLINE_H__
 
 #ifdef __cplusplus
 extern "C" {

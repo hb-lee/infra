@@ -1,5 +1,5 @@
-#ifndef _THREADPOOL_H_
-#define _THREADPOOL_H_
+#ifndef __THREADPOOL_H__
+#define __THREADPOOL_H__
 
 #include <stdint.h>
 

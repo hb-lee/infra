@@ -1,5 +1,5 @@
-#ifndef _THREADPOOL_STAT_H_
-#define _THREADPOOL_STAT_H_
+#ifndef __THREADPOOL_STAT_H__
+#define __THREADPOOL_STAT_H__
 
 #include "threadpool.h"
 

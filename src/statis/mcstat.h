@@ -1,5 +1,5 @@
-#ifndef _MCACHE_STAT_H_
-#define _MCACHE_STAT_H_
+#ifndef __MCACHE_STAT_H__
+#define __MCACHE_STAT_H__
 
 #include "mcache.h"
 
